@@ -1,16 +1,15 @@
 const fetch = require('node-fetch');
 
-let url1 = 'https://api.foxsports.com/sportsdata/v1/basketball/nba/events.json?enable=broadcasts%2Cvideos%2Codds%2Cteamdetails&date=20200107&apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq'
-let url2 = 'https://api.foxsports.com/sportsdata/v1/live/nba/scores.json?enable=teaser%2Ctopperformers%2Clastplay&date=20200107&t=20200108050525&apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq'
 
 
-function fetchTeamsAndScores(url1){
 
-    fetch(url1)
+
+function fetchTeamsAndScores(){
+
+    fetch('https://api.foxsports.com/sportsdata/v1/basketball/nba/events.json?enable=broadcasts%2Cvideos%2Codds%2Cteamdetails&date=20200107&apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq')
     .then(res => res.json())
     .then(response => {
         let listOfGames = response.page
-        // console.log(listOfGames)
         
         for(let game of listOfGames){
             let homeTeam = `${game.homeTeam.location} ${game.homeTeam.name}`
@@ -27,24 +26,27 @@ function fetchTeamsAndScores(url1){
                 currentStatus = `${currentPeriod} ${timeRemaining}`
             }
             let teamsAndScores = `${homeTeam} ${homeScore} ${awayTeam} ${awayScore} ${status}`
-            console.log(teamsAndScores)
+            let converted1 = JSON.stringify(teamsAndScores)
+            // console.log(converted1)
+            return converted1
         }           
     });
 }
 
 
 
-    function fetchTeasers(url2){
+    function fetchTeasers(){
 
-        fetch(url2)
+        fetch('https://api.foxsports.com/sportsdata/v1/live/nba/scores.json?enable=teaser%2Ctopperformers%2Clastplay&date=20200107&t=20200108050525&apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq')
         .then(res => res.json())
         .then(response => {
             let listOfTeasers = response
             for(let game of listOfTeasers){
                 let nugget = game.Teaser.Text
-                console.log(nugget)
+                let converted = JSON.stringify(nugget)
+                return converted
             }       
         });
     }
 
-let first = fetchTeamsAndScores(url1) + fetchTeasers(url2)
+
